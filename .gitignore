@@ -1,0 +1,4 @@
+test.xml
+*.o
+*.exe
+.vscode

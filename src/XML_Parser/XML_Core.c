@@ -36,6 +36,7 @@ XMLNode *XMLNode_new(XMLNode *parent)
     node->parent = parent;
     node->tag = NULL;
     node->content = NULL;
+    XMLAttributesList_init(&node->attributes);
     return node;
 }
 
@@ -45,6 +46,8 @@ void XMLNode_free(XMLNode *node)
         free(node->tag);
     if (node->content)
         free(node->content);
+    for (int i = 0; i < node->attributes.size; i++)
+        XMLAttribute_free(&node->attributes.data[i]);
     if (node)
         free(node);
 }

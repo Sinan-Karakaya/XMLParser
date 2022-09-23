@@ -9,6 +9,8 @@ CFLAGS = -Wall -Wextra $(INCLUDE)
 
 NAME = xml_parser
 
+LIB_NAME = libxml_parser.a
+
 all: $(NAME)
 
 $(NAME): $(OBJ)
@@ -22,5 +24,10 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
+	rm -f $(LIB_NAME)
 
 re: fclean all
+
+lib: $(OBJ)
+	ar rc $(LIB_NAME) $(OBJ)
+	rm -f $(OBJ)

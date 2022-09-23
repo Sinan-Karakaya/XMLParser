@@ -40,6 +40,12 @@ void XMLNodeList_init(XMLNodeList *list)
     list->data = calloc(sizeof(XMLNode*), list->heap_size);
 }
 
+void XMLNodeList_free(XMLNodeList *list)
+{
+    if (list)
+        free(list);
+}
+
 void XMLNodeList_add(XMLNodeList *list, XMLNode *node)
 {
     while (list->size >= list->heap_size) {
@@ -47,6 +53,16 @@ void XMLNodeList_add(XMLNodeList *list, XMLNode *node)
         list->data = realloc(list->data, sizeof(XMLNode*) * list->heap_size);
     }
     list->data[list->size++] = node;
+}
+
+XMLAttribute *XMLNode_getAttribute(XMLNode *node, char *key)
+{
+    for (size_t i = 0; i < node->attributes.size; i++) {
+        XMLAttribute *attr = &node->attributes.data[i];
+        if (strcmp(attr->key, key) == 0)
+            return attr;
+    }
+    return NULL;
 }
 
 const char *XMLNode_getAttributeValue(XMLNode *node, const char *key)
@@ -57,4 +73,24 @@ const char *XMLNode_getAttributeValue(XMLNode *node, const char *key)
             return attr.value;
     }
     return NULL;
+}
+
+XMLNode *XMLNode_getAt(XMLNodeList *list, const int index)
+{
+    if (index >= list->size)
+        return NULL;
+    return list->data[index];
+}
+
+XMLNodeList *XMLNode_getChildrenByTag(XMLNode *parent, const char *tag)
+{
+    XMLNodeList *list = calloc(sizeof(XMLNodeList), 1);
+
+    XMLNodeList_init(list);
+    for (size_t i = 0; i < parent->children.size; i++) {
+        XMLNode *child = parent->children.data[i];
+        if (strcmp(child->tag, tag) == 0)
+            XMLNodeList_add(list, child);
+    }
+    return list;
 }

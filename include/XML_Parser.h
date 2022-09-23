@@ -76,9 +76,13 @@ TagType XMLAttribute_parse(const char *source, int *i, char *lex, int *lexi, XML
 void XMLAttribute_free(XMLAttribute *attr);
 
 bool XMLNode_lexicalAnalysis(XMLDocument *doc, const char *source);
+XMLNode *XMLNode_getAt(XMLNodeList *list, const int index);
+XMLNodeList *XMLNode_getChildrenByTag(XMLNode *parent, const char *tag);
+XMLAttribute *XMLNode_getAttribute(XMLNode *node, char *key);
 
 void XMLAttributeList_init(XMLAttributeList *list);
 void XMLAttributeList_add(XMLAttributeList *list, XMLAttribute *attr);
 
 void XMLNodeList_init(XMLNodeList *list);
 void XMLNodeList_add(XMLNodeList *list, XMLNode *attr);
+void XMLNodeList_free(XMLNodeList *list);

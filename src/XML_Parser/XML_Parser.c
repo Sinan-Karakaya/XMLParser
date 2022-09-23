@@ -30,11 +30,11 @@ bool XMLNode_lexicalAnalysis(XMLDocument *doc, const char *source)
                 lex[lexi] = '\0';
 
                 if (!currentNode) {
-                    fprintf(stderr, "Already at the root\n");
+                    fprintf(stderr, BOLDRED"Already at the root\n"RESET);
                     return false;
                 }
                 if (strcmp(currentNode->tag, lex) != 0) {
-                    fprintf(stderr, "Mismatched tags: %s != %s\n", currentNode->tag, lex);
+                    fprintf(stderr, BOLDRED"Mismatched tags:%s %s != %s\n", RESET, currentNode->tag, lex);
                     return false;
                 }
 
@@ -43,59 +43,47 @@ bool XMLNode_lexicalAnalysis(XMLDocument *doc, const char *source)
                 continue;
             }
 
-            // Set current node
-           currentNode = XMLNode_new(currentNode);
+            // Special nodes
+            if (source[i + 1] == '!') {
+                while (source[i] != ' ' && source[i] != '>' )
+                    lex[lexi++] = source[i++];
+                lex[lexi] = '\0';
 
-            // Get beginning of tag
-            i++;
-            XMLAttribute currAttr = {0, 0};
-            while (source[i] != '>') {
-                lex[lexi++] = source[i++];
-
-                // Tag Name
-                if (source[i] == ' ' && !currentNode->tag) {
+                // Comments
+                if (!strcmp(lex, "<!--")) {
                     lex[lexi] = '\0';
-                    currentNode->tag = strdup(lex);
-                    lexi = 0;
-                    i++;
-                    continue;
-                }
-
-                // Ignore spaces at end of tag
-                if (lex[lexi - 1] == ' ') {
-                    lexi--;
-                    continue;
-                }
-
-                // Get attribute key
-                if (source[i] == '=') {
-                    lex[lexi] = '\0';
-                    currAttr.key = strdup(lex);
-                    lexi = 0;
-                    continue;
-                }
-
-                // Get attribute value
-                if (source[i] == '"') {
-                    if (!currAttr.key) {
-                        fprintf(stderr, "Attribute value without key\n");
-                        return false;
-                    }
-                    lexi = 0;
-                    i++;
-
-                    while (source[i] != '"')
+                    while (!ends_with(lex, "-->")) {
                         lex[lexi++] = source[i++];
-                    lex[lexi] = '\0';
-                    currAttr.value = strdup(lex);
-                    XMLAttributeList_add(&currentNode->attributes, &currAttr);
-                    currAttr.key = NULL;
-                    currAttr.value = NULL;
-                    lexi = 0;
-                    i++;
+                        lex[lexi] = '\0';
+                    }
                     continue;
                 }
             }
+
+            // Declaration tag
+            if (source[i + 1] == '?') {
+                while (source[i] != ' ' && source[i] != '>' )
+                    lex[lexi++] = source[i++];
+                lex[lexi] = '\0';
+
+                // XML Declaration
+                if (!strcmp(lex, "<?xml")) {
+                    lexi = 0;
+                    XMLNode *decl = XMLNode_new(NULL);
+                    XMLAttribute_parse(source, &i, lex, &lexi, decl);
+
+                    doc->version = XMLNode_getAttributeValue(decl, "version");
+                    doc->encoding = XMLNode_getAttributeValue(decl, "encoding");
+                    continue;
+                }
+            }
+
+            // Set current node
+           currentNode = XMLNode_new(currentNode);
+
+            // Parse in tag
+            i++;
+            XMLAttribute_parse(source, &i, lex, &lexi, currentNode);
 
             // Set tag name
             lex[lexi] = '\0';

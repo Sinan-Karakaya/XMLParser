@@ -48,3 +48,13 @@ void XMLNodeList_add(XMLNodeList *list, XMLNode *node)
     }
     list->data[list->size++] = node;
 }
+
+const char *XMLNode_getAttributeValue(XMLNode *node, const char *key)
+{
+    for (size_t i = 0; i < node->attributes.size; i++) {
+        XMLAttribute attr = node->attributes.data[i];
+        if (strcmp(attr.key, key) == 0)
+            return attr.value;
+    }
+    return NULL;
+}

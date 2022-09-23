@@ -51,15 +51,21 @@ struct t_XMLNode {
 
 struct t_XMLDocument {
     XMLNode *root;
+    const char *version;
+    const char *encoding;
 };
 
 bool XMLDocument_load(XMLDocument *doc, const char *path);
 void XMLDocument_free(XMLDocument *doc);
 
+bool ends_with(const char *str, const char *to_find);
+
 XMLNode *XMLNode_new(XMLNode *parent);
 void XMLNode_free(XMLNode *node);
 XMLNode *XMLNode_getChild(XMLNode *node, const size_t index);
+const char *XMLNode_getAttributeValue(XMLNode *node, const char *key);
 
+void XMLAttribute_parse(const char *source, int *i, char *lex, int *lexi, XMLNode *currentNode);
 void XMLAttribute_free(XMLAttribute *attr);
 
 bool XMLNode_lexicalAnalysis(XMLDocument *doc, const char *source);

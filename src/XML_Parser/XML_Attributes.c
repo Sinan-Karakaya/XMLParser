@@ -23,3 +23,55 @@ void XMLAttributeList_add(XMLAttributeList *list, XMLAttribute *attr)
     }
     list->data[list->size++] = *attr;
 }
+
+void XMLAttribute_parse(const char *source, int *i, char *lex, int *lexi, XMLNode *currentNode)
+{
+    XMLAttribute currAttr = {0, 0};
+    while (source[*i] != '>') {
+        lex[(*lexi)++] = source[(*i)++];
+
+        // Tag Name
+        if (source[*i] == ' ' && !currentNode->tag) {
+            lex[*lexi] = '\0';
+            currentNode->tag = strdup(lex);
+            *lexi = 0;
+            (*i)++;
+            continue;
+        }
+
+        // Ignore spaces at end of tag
+        if (lex[*lexi - 1] == ' ') {
+            (*lexi)--;
+            continue;
+        }
+
+        // Get attribute key
+        if (source[*i] == '=') {
+            lex[*lexi] = '\0';
+            currAttr.key = strdup(lex);
+            *lexi = 0;
+            continue;
+        }
+
+        // Get attribute value
+        if (source[*i] == '"') {
+            if (!currAttr.key) {
+                fprintf(stderr, BOLDRED"Attribute value without key\n"RESET);
+                exit(1);
+            }
+            *lexi = 0;
+            (*i)++;
+
+            while (source[*i] != '"')
+                lex[(*lexi)++] = source[(*i)++];
+            lex[*lexi] = '\0';
+            currAttr.value = strdup(lex);
+            XMLAttributeList_add(&currentNode->attributes, &currAttr);
+            currAttr.key = NULL;
+            currAttr.value = NULL;
+            *lexi = 0;
+            (*i)++;
+            continue;
+        }
+    }
+}

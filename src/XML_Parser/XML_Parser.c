@@ -34,7 +34,7 @@ bool XMLNode_lexicalAnalysis(XMLDocument *doc, const char *source)
                     return false;
                 }
                 if (strcmp(currentNode->tag, lex) != 0) {
-                    fprintf(stderr, "Mismatched tags: %s != %s", currentNode->tag, lex);
+                    fprintf(stderr, "Mismatched tags: %s != %s\n", currentNode->tag, lex);
                     return false;
                 }
 

@@ -12,14 +12,14 @@ struct t_XMLAttribute {
 };
 
 struct t_XMLAttributeList {
-    int heap_size;
-    int size;
+    size_t heap_size;
+    size_t size;
     XMLAttribute *data;
 };
 
 struct t_XMLNodeList {
-    int heap_size;
-    int size;
+    size_t heap_size;
+    size_t size;
     XMLNode **data;
 };
 
@@ -40,7 +40,7 @@ void XMLDocument_free(XMLDocument *doc);
 
 XMLNode *XMLNode_new(XMLNode *parent);
 void XMLNode_free(XMLNode *node);
-XMLNode *XMLNode_getChild(XMLNode *node, const unsigned int index);
+XMLNode *XMLNode_getChild(XMLNode *node, const size_t index);
 
 void XMLAttribute_free(XMLAttribute *attr);
 

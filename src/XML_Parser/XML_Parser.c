@@ -6,7 +6,7 @@ bool XMLNode_lexicalAnalysis(XMLDocument *doc, const char *source)
     int lexi = 0;
     int i = 0;
 
-    XMLNode *currentNode = NULL;
+    XMLNode *currentNode = doc->root;
 
     while (source[i]) {
         if (source[i] == '<') {
@@ -44,10 +44,7 @@ bool XMLNode_lexicalAnalysis(XMLDocument *doc, const char *source)
             }
 
             // Set current node
-            if (!currentNode)
-                currentNode = doc->root;
-            else
-                currentNode = XMLNode_new(currentNode);
+           currentNode = XMLNode_new(currentNode);
 
             // Get beginning of tag
             i++;

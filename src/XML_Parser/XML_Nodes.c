@@ -20,13 +20,13 @@ void XMLNode_free(XMLNode *node)
         free(node->tag);
     if (node->content)
         free(node->content);
-    for (int i = 0; i < node->attributes.size; i++)
+    for (size_t i = 0; i < node->attributes.size; i++)
         XMLAttribute_free(&node->attributes.data[i]);
     if (node)
         free(node);
 }
 
-XMLNode *XMLNode_getChild(XMLNode *node, const unsigned int index)
+XMLNode *XMLNode_getChild(XMLNode *node, const size_t index)
 {
     if (index >= node->children.size)
         return NULL;

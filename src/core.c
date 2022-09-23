@@ -4,13 +4,12 @@ int main(int ac, char **av)
 {
     XMLDocument doc;
     if (XMLDocument_load(&doc, av[1])) {
-        printf("%s: %s\n", doc.root->tag, doc.root->content);
+        XMLNode *more_node = XMLNode_getChild(XMLNode_getChild(doc.root, 0), 0);
+        printf("%s : %s\n", more_node->tag, more_node->content);
 
-        XMLNode node = *doc.root;
-        for (int i = 0; i < node.attributes.size; i++) {
-            XMLAttribute attr = node.attributes.data[i];
-            printf("%s => %s\n", attr.key,attr.value);
-        }
+        XMLNode *another_node = XMLNode_getChild(doc.root, 1);
+        printf("%s : %s\n", another_node->tag, another_node->content);
+
         XMLDocument_free(&doc);
     }
     return 0;

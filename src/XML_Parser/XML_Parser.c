@@ -91,7 +91,7 @@ bool XMLNode_lexicalAnalysis(XMLDocument *doc, const char *source)
                         lex[lexi++] = source[i++];
                     lex[lexi] = '\0';
                     currAttr.value = strdup(lex);
-                    XMLAttributesList_add(&currentNode->attributes, &currAttr);
+                    XMLAttributeList_add(&currentNode->attributes, &currAttr);
                     currAttr.key = NULL;
                     currAttr.value = NULL;
                     lexi = 0;

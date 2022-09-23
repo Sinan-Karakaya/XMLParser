@@ -1,4 +1,4 @@
-test.xml
+out.xml
 *.o
 *.exe
 .vscode

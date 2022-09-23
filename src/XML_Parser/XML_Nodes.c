@@ -77,7 +77,7 @@ const char *XMLNode_getAttributeValue(XMLNode *node, const char *key)
 
 XMLNode *XMLNode_getAt(XMLNodeList *list, const int index)
 {
-    if (index >= list->size)
+    if ((size_t)index >= list->size)
         return NULL;
     return list->data[index];
 }

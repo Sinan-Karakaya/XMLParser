@@ -64,6 +64,7 @@ enum TagType {
 
 bool XMLDocument_load(XMLDocument *doc, const char *path);
 void XMLDocument_free(XMLDocument *doc);
+bool XMLDocument_write(XMLDocument *doc, const char *path, int indent);
 
 bool ends_with(const char *str, const char *to_find);
 

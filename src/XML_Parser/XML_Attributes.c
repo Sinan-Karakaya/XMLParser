@@ -24,7 +24,7 @@ void XMLAttributeList_add(XMLAttributeList *list, XMLAttribute *attr)
     list->data[list->size++] = *attr;
 }
 
-void XMLAttribute_parse(const char *source, int *i, char *lex, int *lexi, XMLNode *currentNode)
+TagType XMLAttribute_parse(const char *source, int *i, char *lex, int *lexi, XMLNode *currentNode)
 {
     XMLAttribute currAttr = {0, 0};
     while (source[*i] != '>') {
@@ -42,7 +42,6 @@ void XMLAttribute_parse(const char *source, int *i, char *lex, int *lexi, XMLNod
         // Ignore spaces at end of tag
         if (lex[*lexi - 1] == ' ') {
             (*lexi)--;
-            continue;
         }
 
         // Get attribute key
@@ -73,5 +72,15 @@ void XMLAttribute_parse(const char *source, int *i, char *lex, int *lexi, XMLNod
             (*i)++;
             continue;
         }
+
+        // Inline Node
+        if (source[*i - 1] == '/' && source[*i] == '>') {
+            lex[*lexi] = '\0';
+            if (!currentNode->tag)
+                currentNode->tag = strdup(lex);
+            (*i)++;
+            return TAG_INLINE;
+        }
     }
+    return TAG_START;
 }

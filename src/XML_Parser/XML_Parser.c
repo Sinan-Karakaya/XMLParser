@@ -83,7 +83,11 @@ bool XMLNode_lexicalAnalysis(XMLDocument *doc, const char *source)
 
             // Parse in tag
             i++;
-            XMLAttribute_parse(source, &i, lex, &lexi, currentNode);
+            if (XMLAttribute_parse(source, &i, lex, &lexi, currentNode) == TAG_INLINE) {
+                currentNode = currentNode->parent;
+                i++;
+                continue;
+            }
 
             // Set tag name
             lex[lexi] = '\0';

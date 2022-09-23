@@ -24,6 +24,8 @@ typedef struct t_XMLNode XMLNode;
 typedef struct t_XMLNodeList XMLNodeList;
 typedef struct t_XMLDocument XMLDocument;
 
+typedef enum TagType TagType;
+
 struct t_XMLAttribute {
     char *key;
     char *value;
@@ -55,6 +57,11 @@ struct t_XMLDocument {
     const char *encoding;
 };
 
+enum TagType {
+    TAG_START,
+    TAG_INLINE,
+};
+
 bool XMLDocument_load(XMLDocument *doc, const char *path);
 void XMLDocument_free(XMLDocument *doc);
 
@@ -65,7 +72,7 @@ void XMLNode_free(XMLNode *node);
 XMLNode *XMLNode_getChild(XMLNode *node, const size_t index);
 const char *XMLNode_getAttributeValue(XMLNode *node, const char *key);
 
-void XMLAttribute_parse(const char *source, int *i, char *lex, int *lexi, XMLNode *currentNode);
+TagType XMLAttribute_parse(const char *source, int *i, char *lex, int *lexi, XMLNode *currentNode);
 void XMLAttribute_free(XMLAttribute *attr);
 
 bool XMLNode_lexicalAnalysis(XMLDocument *doc, const char *source);

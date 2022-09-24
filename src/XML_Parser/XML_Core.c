@@ -62,7 +62,7 @@ static void node_out(FILE *file, XMLNode *node, int indent, int times)
     }
 }
 
-bool XMLDocument_write(XMLDocument *doc, const char *path, int indent)
+bool XMLDocument_write(XMLDocument *doc, const char *path, unsigned int indent)
 {
     FILE *file = fopen(path, "w");
 

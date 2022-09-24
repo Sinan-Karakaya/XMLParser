@@ -7,9 +7,9 @@ INCLUDE = -Iinclude
 
 CFLAGS = -Wall -Wextra $(INCLUDE)
 
-NAME = xml_parser
+NAME = bin/xml_parser
 
-LIB_NAME = libxml_parser.a
+LIB_NAME = bin/libxml_parser.a
 
 all: $(NAME)
 

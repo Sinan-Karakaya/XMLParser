@@ -8,11 +8,14 @@ void XMLAttribute_free(XMLAttribute *attr)
         free(attr->value);
 }
 
-void XMLAttributeList_init(XMLAttributeList *list)
+bool XMLAttributeList_init(XMLAttributeList *list)
 {
     list->heap_size = 1;
     list->size = 0;
     list->data = calloc(sizeof(XMLAttribute), list->heap_size);
+    if (!list->data)
+        return false;
+    return true;
 }
 
 void XMLAttributeList_add(XMLAttributeList *list, XMLAttribute *attr)

@@ -55,7 +55,7 @@ void XMLNodeList_add(XMLNodeList *list, XMLNode *node)
     list->data[list->size++] = node;
 }
 
-XMLAttribute *XMLNode_getAttribute(XMLNode *node, char *key)
+XMLAttribute *XMLNode_getAttribute(XMLNode *node, const char *key)
 {
     for (size_t i = 0; i < node->attributes.size; i++) {
         XMLAttribute *attr = &node->attributes.data[i];
